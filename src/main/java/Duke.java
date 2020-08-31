@@ -41,8 +41,7 @@ public class Duke {
     public static void addToDo(Task[] taskList, String line) {
         String description = line.substring(5);
         taskList[Task.taskIdx] = new ToDo(description);
-        printTaskAddedMessage(description);
-        printRemainingTask(taskList);
+        printTaskAddedMessage(taskList, description);
     }
 
     public static void addDeadline(Task[] taskList, String line) {
@@ -51,8 +50,7 @@ public class Duke {
             String description = line.substring(9, idx - 1);
             String by = line.substring(idx + 1);
             taskList[Task.taskIdx] = new Deadline(description, by);
-            printTaskAddedMessage(line);
-            printRemainingTask(taskList);
+            printTaskAddedMessage(taskList, line);
         }   catch (StringIndexOutOfBoundsException e) {
             printErrorMessage();
         }
@@ -64,8 +62,7 @@ public class Duke {
             String description = line.substring(6, idx - 1);
             String time = line.substring(idx + 1);
             taskList[Task.taskIdx] = new Event(description, time);
-            printTaskAddedMessage(line);
-            printRemainingTask(taskList);
+            printTaskAddedMessage(taskList, line);
         }   catch (StringIndexOutOfBoundsException e) {
             printErrorMessage();
         }
@@ -90,9 +87,9 @@ public class Duke {
         System.out.println(separator);
     }
 
-    public static void printTaskAddedMessage(String line) {
+    public static void printTaskAddedMessage(Task[] taskList,String line) {
         System.out.println("added: " + line);
-        System.out.println(separator);
+        printRemainingTask(taskList);
     }
 
     public static void printWelcome() {
