@@ -40,7 +40,7 @@ public class Duke {
     }
     public static void addToDo(Task[] taskList, String line) {
         String description = line.substring(5);
-        taskList[Task.taskCount] = new ToDo(description);
+        taskList[Task.taskIdx] = new ToDo(description);
         printTaskAddedMessage(description);
         printRemainingTask(taskList);
     }
@@ -50,7 +50,7 @@ public class Duke {
         try {
             String description = line.substring(9, idx - 1);
             String by = line.substring(idx + 1);
-            taskList[Task.taskCount] = new Deadline(description, by);
+            taskList[Task.taskIdx] = new Deadline(description, by);
             printTaskAddedMessage(line);
             printRemainingTask(taskList);
         }   catch (StringIndexOutOfBoundsException e) {
@@ -63,7 +63,7 @@ public class Duke {
         try {
             String description = line.substring(6, idx - 1);
             String time = line.substring(idx + 1);
-            taskList[Task.taskCount] = new Event(description, time);
+            taskList[Task.taskIdx] = new Event(description, time);
             printTaskAddedMessage(line);
             printRemainingTask(taskList);
         }   catch (StringIndexOutOfBoundsException e) {
@@ -73,7 +73,7 @@ public class Duke {
     }
     public static void printList(Task[] taskList) {
         System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < Task.taskCount; i++) {
+        for (int i = 0; i < Task.taskIdx; i++) {
             System.out.println((Integer.toString(i + 1) + taskList[i]));
         }
         System.out.println(separator);

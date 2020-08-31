@@ -1,13 +1,13 @@
 public class Task {
     protected String description;
     protected boolean isDone;
-    public static int taskCount = 0;
+    public static int taskIdx = 0;
     public static int taskCounter = 0;
 
     public Task (String description) {
         this.description = description;
         this.isDone = false;
-        taskCount++;
+        taskIdx++;
         taskCounter++;
     }
 
