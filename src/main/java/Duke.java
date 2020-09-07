@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.util.Scanner;
 
 public class Duke {
@@ -15,18 +14,17 @@ public class Duke {
             line = in.nextLine();
             if (line.equals("bye")) {
                 break;
-            }   else if (line.equals("list")) {
+            } else if (line.equals("list")) {
                     printList(taskList);
-            }   else if (line.startsWith("done ")) {
+            } else if (line.startsWith("done ")) {
                     doTask(taskList, line);
-            }   else if (line.startsWith("todo ")){
+            } else if (line.startsWith("todo ")){
                     addToDo(taskList, line);
-            }   else if (line.startsWith("deadline ")) {
+            } else if (line.startsWith("deadline ")) {
                     addDeadline(taskList, line);
-            }   else if (line.startsWith("event ")) {
+            } else if (line.startsWith("event ")) {
                     addEvent(taskList,line);
-
-            }   else {
+            } else {
                 printErrorMessage();
             }
         }
