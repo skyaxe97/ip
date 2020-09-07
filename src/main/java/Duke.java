@@ -56,7 +56,7 @@ public class Duke {
         } catch (StringIndexOutOfBoundsException e) {
             printErrorMessage();
         } catch (DukeException e) {
-            System.err.println("Empty input");
+            System.err.println(e);
         }
     }
 
