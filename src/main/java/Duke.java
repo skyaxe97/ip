@@ -14,21 +14,30 @@ public class Duke {
             line = in.nextLine();
             if (line.equals("bye")) {
                 break;
-            } else if (line.equals("list")) {
-                    printList(taskList);
-            } else if (line.startsWith("done ")) {
-                    doTask(taskList, line);
-            } else if (line.startsWith("todo ")){
-                    addToDo(taskList, line);
-            } else if (line.startsWith("deadline ")) {
-                    addDeadline(taskList, line);
-            } else if (line.startsWith("event ")) {
-                    addEvent(taskList,line);
             } else {
-                printErrorMessage();
+                runCommand(taskList, line);
             }
         }
         printGoodbye();
+    }
+    public static void runCommand(Task[] taskList, String line) {
+        try {
+            if (line.equals("list")) {
+                printList(taskList);
+            } else if (line.startsWith("done ")) {
+                doTask(taskList, line);
+            } else if (line.startsWith("todo ")) {
+                addToDo(taskList, line);
+            } else if (line.startsWith("deadline ")) {
+                addDeadline(taskList, line);
+            } else if (line.startsWith("event ")) {
+                addEvent(taskList, line);
+            } else {
+                throw new DukeException("Unrecognised input");
+            }
+        } catch (DukeException e) {
+            System.err.println(e);
+        }
     }
     public static void doTask(Task[] taskList, String line) {
         int idx = Integer.parseInt(line.substring(5)) - 1;
@@ -37,9 +46,18 @@ public class Duke {
         printRemainingTask(taskList);
     }
     public static void addToDo(Task[] taskList, String line) {
-        String description = line.substring(5);
-        taskList[Task.taskIdx] = new ToDo(description);
-        printTaskAddedMessage(taskList, description);
+        try {
+            String description = line.substring(5);
+            if (description.isEmpty()) {
+                throw new DukeException("Invalid input");
+            }
+            taskList[Task.taskIdx] = new ToDo(description);
+            printTaskAddedMessage(taskList, description);
+        } catch (StringIndexOutOfBoundsException e) {
+            printErrorMessage();
+        } catch (DukeException e) {
+            System.err.println("Empty input");
+        }
     }
 
     public static void addDeadline(Task[] taskList, String line) {
