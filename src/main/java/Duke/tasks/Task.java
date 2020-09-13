@@ -2,7 +2,7 @@ package Duke.tasks;
 
 public class Task {
     public String description;
-    protected boolean isDone;
+    public boolean isDone;
     public static int taskIdx = 0;
     public static int taskCounter = 0;
 
