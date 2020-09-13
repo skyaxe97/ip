@@ -16,6 +16,7 @@ public class Duke {
     public static final String COMMAND_LIST = "list";
     public static final String COMMAND_BYE = "bye";
     public static final String COMMAND_HELP = "help";
+    public static final String COMMAND_DELETE = "delete ";
 
     //Printed messages
     public static final String SEPARATOR = "================================";
@@ -27,9 +28,11 @@ public class Duke {
     public static final String EXCEPTION_INVALID_COMMAND = "Invalid command, please re-enter command";
     public static final String EXCEPTION_EMPTY_ARGUMENT = "Empty argument, please insert argument";
 
+    
+    
     public static void main(String[] args) {
         printWelcome();
-        Task[] taskList = new Task[100];
+        ArrayList<Task> taskList = new ArrayList<>();
         String line;
         Scanner in = new Scanner(System.in);
 
@@ -43,7 +46,7 @@ public class Duke {
         }
         printGoodbye();
     }
-    public static void runCommand(Task[] taskList, String line) {
+    public static void runCommand(ArrayList<Task> taskList, String line) {
         try {
             if (line.equals(COMMAND_LIST)) {
                 printList(taskList);
@@ -57,6 +60,8 @@ public class Duke {
                 addEvent(taskList, line);
             } else if (line.startsWith(COMMAND_HELP)) {
                 printHelp();
+            } else if (line.startsWith(COMMAND_DELETE)) {
+                deleteTask(taskList, line);
             } else {
                 throw new DukeException(EXCEPTION_INVALID_COMMAND);
             }
@@ -64,19 +69,29 @@ public class Duke {
             System.err.println(e);
         }
     }
-    public static void doTask(Task[] taskList, String line) {
+    public static void doTask(ArrayList<Task> taskList, String line) {
         int idx = Integer.parseInt(line.substring(5)) - 1;
-        taskList[idx].markAsDone();
-        printMarkedAsDoneMessage(taskList[idx].description);
-        printRemainingTask(taskList);
+        taskList.get(idx).markAsDone();
+        printMarkedAsDoneMessage(taskList.get(idx).description);
+        printRemainingTask();
     }
-    public static void addToDo(Task[] taskList, String line) {
+    public static void deleteTask(ArrayList<Task> taskList, String line) {
+        int idx = Integer.parseInt(line.substring(7)) - 1;
+        //prevent double counting when decrementing counter
+        if (!taskList.get(idx).isDone){
+            Task.taskCounter--;
+        }
+        taskList.remove(idx);
+        printList(taskList);
+    }
+    public static void addToDo(ArrayList<Task> taskList, String line) {
         try {
             String description = line.substring(5);
             if (description.isEmpty()) {
                 throw new DukeException(EXCEPTION_EMPTY_ARGUMENT);
             }
-            taskList[Task.taskIdx] = new ToDo(description);
+            ToDo newToDo = new ToDo(description);
+            taskList.add(newToDo);
             printTaskAddedMessage(taskList, description);
         } catch (StringIndexOutOfBoundsException e) {
             System.err.println(e);
@@ -85,34 +100,36 @@ public class Duke {
         }
     }
 
-    public static void addDeadline(Task[] taskList, String line) {
+    public static void addDeadline(ArrayList<Task> taskList, String line) {
         int idx = line.indexOf('/');
         try {
             String description = line.substring(9, idx - 1);
             String by = line.substring(idx + 1);
-            taskList[Task.taskIdx] = new Deadline(description, by);
+            Deadline newDeadLine = new Deadline(description,by);
+            taskList.add(newDeadLine);
             printTaskAddedMessage(taskList, line);
         }   catch (StringIndexOutOfBoundsException e) {
             System.err.println(e);
         }
     }
 
-    public static void addEvent(Task[] taskList, String line) {
+    public static void addEvent(ArrayList<Task> taskList, String line) {
         int idx = line.indexOf('/');
         try {
             String description = line.substring(6, idx - 1);
             String time = line.substring(idx + 1);
-            taskList[Task.taskIdx] = new Event(description, time);
+            Event newEvent = new Event(description, time);
+            taskList.add(newEvent);
             printTaskAddedMessage(taskList, line);
         }   catch (StringIndexOutOfBoundsException e) {
             System.err.println(e);
         }
-
     }
-    public static void printList(Task[] taskList) {
+
+    public static void printList(ArrayList<Task> taskList) {
         System.out.println(MESSAGE_TASK_IN_LIST);
-        for (int i = 0; i < Task.taskIdx; i++) {
-            System.out.println((Integer.toString(i + 1) + taskList[i]));
+        for (int i = 0; i < taskList.size(); i++) {
+            System.out.println((Integer.toString(i + 1) + taskList.get(i).toString()));
         }
         System.out.println(SEPARATOR);
     }
@@ -121,9 +138,9 @@ public class Duke {
         System.out.println(MESSAGE_MARK_AS_DONE + "\n" + "\t" + "[" + "\u2713" + "] " + description + "\n" + SEPARATOR);
     }
 
-    public static void printTaskAddedMessage(Task[] taskList,String line) {
+    public static void printTaskAddedMessage(ArrayList<Task> taskList,String line) {
         System.out.println("added: " + line);
-        printRemainingTask(taskList);
+        printRemainingTask();
     }
 
     public static void printHelp() {
@@ -145,7 +162,7 @@ public class Duke {
         System.out.println(MESSAGE_GOODBYE + "\n" + SEPARATOR);
     }
 
-    public static void printRemainingTask(Task[] taskList) {
+    public static void printRemainingTask() {
         System.out.println("Now you have " + Task.taskCounter + " tasks in the list" + "\n" + SEPARATOR);
     }
 }
