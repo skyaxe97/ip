@@ -5,8 +5,11 @@ import Duke.tasks.Event;
 import Duke.tasks.Task;
 import Duke.tasks.ToDo;
 
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileWriter;
 
 public class Duke {
     public static final String COMMAND_DONE = "done ";
@@ -17,7 +20,6 @@ public class Duke {
     public static final String COMMAND_BYE = "bye";
     public static final String COMMAND_HELP = "help";
     public static final String COMMAND_DELETE = "delete ";
-
     //Printed messages
     public static final String SEPARATOR = "================================";
     public static final String MESSAGE_TASK_IN_LIST = "Here are the tasks in your list:";
@@ -27,12 +29,17 @@ public class Duke {
     //Exception Messages
     public static final String EXCEPTION_INVALID_COMMAND = "Invalid command, please re-enter command";
     public static final String EXCEPTION_EMPTY_ARGUMENT = "Empty argument, please insert argument";
-
+    public static final String MESSAGE_FILE_AND_DIR_CREATED = "New directory and file have been created.";
     
     
     public static void main(String[] args) {
         printWelcome();
         ArrayList<Task> taskList = new ArrayList<>();
+        try {
+            readFromFile(taskList);
+        } catch (IOException e) {
+            System.err.println(e);
+        }
         String line;
         Scanner in = new Scanner(System.in);
 
@@ -46,6 +53,7 @@ public class Duke {
         }
         printGoodbye();
     }
+
     public static void runCommand(ArrayList<Task> taskList, String line) {
         try {
             if (line.equals(COMMAND_LIST)) {
@@ -65,10 +73,63 @@ public class Duke {
             } else {
                 throw new DukeException(EXCEPTION_INVALID_COMMAND);
             }
-        } catch (DukeException e) {
+            writeToFile(taskList);
+        } catch (DukeException | IOException e) {
             System.err.println(e);
         }
     }
+
+    public static void readFromFile (ArrayList<Task> taskList) throws IOException {
+        File dir = new File("data");
+        File f = new File("data/duke.txt");
+        if (f.exists()) {
+            Scanner s = new Scanner(f);
+            while (s.hasNext()) {
+                String input = s.nextLine();
+                processCommand(taskList, input);
+            }
+        } else {
+            if (dir.mkdir()) {
+                System.out.println("Dir created");
+                if (f.createNewFile()) {
+                    System.out.println("File created");
+                }
+            }
+        }
+    }
+
+    public static void processCommand(ArrayList<Task> taskList,String commandLine) {
+        String[] input = commandLine.split(" . ", -1);
+        switch (input[0]) {
+        case "T":
+            if (input[1].equals("true")) {
+                taskList.add(new ToDo(input[2], true));
+                Task.taskCounter--;
+            } else {
+                taskList.add(new ToDo(input[2]));
+            }
+            break;
+        case "D":
+            if (input[1].equals("true")) {
+                taskList.add(new Deadline(input[2], input[3], true));
+                Task.taskCounter--;
+            } else {
+                taskList.add(new Deadline(input[2], input[3]));
+            }
+            break;
+        case "E":
+            if (input[1].equals("true")) {
+                taskList.add(new Event(input[2], input[3], true));
+                Task.taskCounter--;
+            } else {
+                taskList.add(new Event(input[2], input[3]));
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
     public static void doTask(ArrayList<Task> taskList, String line) {
         int idx = Integer.parseInt(line.substring(5)) - 1;
         taskList.get(idx).markAsDone();
@@ -93,9 +154,7 @@ public class Duke {
             ToDo newToDo = new ToDo(description);
             taskList.add(newToDo);
             printTaskAddedMessage(taskList, description);
-        } catch (StringIndexOutOfBoundsException e) {
-            System.err.println(e);
-        } catch (DukeException e) {
+        } catch (StringIndexOutOfBoundsException | DukeException e) {
             System.err.println(e);
         }
     }
@@ -132,6 +191,22 @@ public class Duke {
             System.out.println((Integer.toString(i + 1) + taskList.get(i).toString()));
         }
         System.out.println(SEPARATOR);
+    }
+
+    public static void writeToFile (ArrayList<Task> taskList) throws IOException {
+        FileWriter fw = new FileWriter("data/duke.txt");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < taskList.size(); i++) {
+            if (taskList.get(i) instanceof ToDo) {
+                sb.append("T . " + taskList.get(i).isDone + " . " + taskList.get(i).description + '\n');
+            } else if (taskList.get(i) instanceof  Deadline) {
+                sb.append("D . " + taskList.get(i).isDone + " . " + taskList.get(i).description + " . " + ((Deadline) taskList.get(i)).getBy() + '\n');
+            } else {
+                sb.append("E . " + taskList.get(i).isDone + " . " + taskList.get(i).description + " . " + ((Event) taskList.get(i)).getTime() + '\n');
+            }
+        }
+        fw.write(sb.toString());
+        fw.close();
     }
 
     public static void printMarkedAsDoneMessage(String description) {
