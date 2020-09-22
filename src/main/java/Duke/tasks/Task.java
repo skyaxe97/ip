@@ -3,13 +3,11 @@ package Duke.tasks;
 public class Task {
     public String description;
     public boolean isDone;
-    public static int taskIdx = 0;
     public static int taskCounter = 0;
 
     public Task (String description) {
         this.description = description;
         this.isDone = false;
-        taskIdx++;
         taskCounter++;
     }
 
