@@ -2,11 +2,13 @@ package Duke;
 
 import Duke.exceptions.DukeException;
 import Duke.tasks.Task;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
+/**
+ * Handles all actions that interacts with the user interface.
+ * This includes reading in inputs and printing out outputs.
+ */
 public class Ui {
     public static final int FIND_CHAR_COUNT = 5;
     public static final String SEPARATOR = "================================";
@@ -32,12 +34,13 @@ public class Ui {
         System.out.println("bye............................................. to quit\n" + SEPARATOR);
     }
 
-
-
+    /**
+     * Reads in user command
+     * @return User command as String
+     */
     public static String readCommand() {
         Scanner in = new Scanner(System.in);
-        String command = in.nextLine();
-        return command;
+        return in.nextLine();
 
     }
     public static void printWelcome() {
@@ -47,11 +50,12 @@ public class Ui {
     public static void printGoodbye() {
         System.out.println(MESSAGE_GOODBYE + "\n" + SEPARATOR);
     }
+
     public static void printMarkedAsDoneMessage(String description) {
         System.out.println(MESSAGE_MARK_AS_DONE + "\n" + "\t" + "[" + "\u2713" + "] " + description + "\n" + SEPARATOR);
     }
 
-    public static void printTaskAddedMessage(ArrayList<Task> taskList, String line) {
+    public static void printTaskAddedMessage(String line) {
         System.out.println("added: " + line);
         printRemainingTask();
     }
@@ -59,6 +63,11 @@ public class Ui {
         System.out.println("Now you have " + Task.taskCounter + " tasks in the list" + "\n" + SEPARATOR);
     }
 
+    /**
+     * Prints entire taskList with the full descriptions.
+     * @param taskList This is the taskList to be traversed
+     *                 and printed.
+     */
     public static void printList(ArrayList<Task> taskList) {
         System.out.println(MESSAGE_TASK_IN_LIST);
         for (int i = 0; i < taskList.size(); i++) {
@@ -66,6 +75,15 @@ public class Ui {
         }
         System.out.println(SEPARATOR);
     }
+
+    /**
+     * Takes in taskList from TaskList and prints all
+     * tasks that matches user query.
+     * @param taskList This is the taskList to be traversed
+     *                 to find all matches.
+     * @param line This is the input command that contains
+     *             the user's query.
+     */
     public static void printTaskQuery(ArrayList<Task> taskList, String line) {
         System.out.println(SEPARATOR + "\n" + MESSAGE_TASK_QUERY);
         try {

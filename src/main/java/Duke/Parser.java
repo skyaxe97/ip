@@ -9,6 +9,10 @@ import Duke.tasks.ToDo;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Handles the parsing of any commands from either
+ * the local data file or user input commands.
+ */
 public class Parser {
     public static final String EXCEPTION_INVALID_COMMAND = "Invalid command, please re-enter command";
     public static final String COMMAND_DONE = "done ";

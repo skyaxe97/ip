@@ -1,12 +1,13 @@
 package Duke;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-
+/**
+ * Handles all actions that involved the local data file.
+ */
 public class Storage {
     protected String filePath;
     protected static File file;
@@ -29,8 +30,6 @@ public class Storage {
                 String input = s.nextLine();
                 Parser.parseFileCommands(input);
             }
-        } catch (FileNotFoundException e) {
-            System.err.println(e);
         } catch (IOException e) {
             System.err.println(e);
         }
