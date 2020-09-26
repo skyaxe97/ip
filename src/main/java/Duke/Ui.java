@@ -23,13 +23,13 @@ public class Ui {
 
     public static void printHelp() {
         System.out.println(SEPARATOR + "\nHere are the commands that you can use");
-        System.out.println("todo {description}........................ to add new task");
-        System.out.println("deadline {description} /by (date time}... to add new task with a dateline");
-        System.out.println("event {description} /at (date time) ..... to add new event that takes place at a specific time");
-        System.out.println("list...................................... list out all tasks");
-        System.out.println("done [item num]........................... to mark a task as done");
-        System.out.println("delete [item num]......................... to mark a task as done");
-        System.out.println("bye....................................... to quit\n" + SEPARATOR);
+        System.out.println("todo {description}.............................. to add new task");
+        System.out.println("deadline {description} / {yyyy-mm-dd,HH:mm}... to add new task with a dateline");
+        System.out.println("event {description} / {yyyy-mm-dd,HH:mm} ..... to add new event that takes place at a specific time");
+        System.out.println("list............................................ list out all tasks");
+        System.out.println("done [item num]................................. to mark a task as done");
+        System.out.println("delete [item num]............................... to mark a task as done");
+        System.out.println("bye............................................. to quit\n" + SEPARATOR);
     }
 
 

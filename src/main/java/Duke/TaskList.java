@@ -7,6 +7,9 @@ import Duke.tasks.Task;
 import Duke.tasks.ToDo;
 
 import java.io.FileWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class TaskList {
@@ -22,6 +25,8 @@ public class TaskList {
     //Exception Messages
     public static final String EXCEPTION_EMPTY_ARGUMENT = "Empty argument, please insert argument";
     protected static ArrayList<Task> taskList;
+    public static final DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm");
+
 
     public TaskList() {
         taskList = new ArrayList<>();
@@ -61,10 +66,11 @@ public class TaskList {
         try {
             String description = line.substring(DEADLINE_CHAR_COUNT, idx - 1);
             String by = line.substring(idx + 1);
-            Deadline newDeadLine = new Deadline(description,by);
+            LocalDateTime dateTime = LocalDateTime.parse(by.trim(),inputFormat);
+            Deadline newDeadLine = new Deadline(description,dateTime);
             taskList.add(newDeadLine);
             Ui.printTaskAddedMessage(taskList, line);
-        }   catch (StringIndexOutOfBoundsException e) {
+        }   catch (StringIndexOutOfBoundsException | DateTimeParseException e) {
             System.err.println(e);
         }
     }
@@ -74,10 +80,11 @@ public class TaskList {
         try {
             String description = line.substring(EVENT_CHAR_COUNT, idx - 1);
             String time = line.substring(idx + 1);
-            Event newEvent = new Event(description, time);
+            LocalDateTime dateTime = LocalDateTime.parse(time.trim(),inputFormat);
+            Event newEvent = new Event(description, dateTime);
             taskList.add(newEvent);
             Ui.printTaskAddedMessage(taskList, line);
-        }   catch (StringIndexOutOfBoundsException e) {
+        }   catch (StringIndexOutOfBoundsException | DateTimeParseException e) {
             System.err.println(e);
         }
     }
