@@ -6,6 +6,9 @@ import Duke.tasks.Event;
 import Duke.tasks.Task;
 import Duke.tasks.ToDo;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Parser {
     public static final String EXCEPTION_INVALID_COMMAND = "Invalid command, please re-enter command";
     public static final String COMMAND_DONE = "done ";
@@ -16,6 +19,7 @@ public class Parser {
     public static final String COMMAND_HELP = "help";
     public static final String COMMAND_DELETE = "delete ";
     public static final String COMMAND_BYE = "bye";
+    public static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm");
 
     public Parser () {
     }
@@ -26,6 +30,10 @@ public class Parser {
      */
     public static void parseFileCommands (String command) {
         String[] input = command.split(" . ", -1);
+
+        StringBuilder sb = new StringBuilder();
+        String [] dateTimeInput;
+        LocalDateTime dateTime;
         switch (input[0]) {
         case "T":
             if (input[1].equals("true")) {
@@ -36,19 +44,25 @@ public class Parser {
             }
             break;
         case "D":
+            dateTimeInput = input[3].split("T",2);
+            sb.append(dateTimeInput[0] + ", " + dateTimeInput[1]);
+            dateTime = LocalDateTime.parse(sb.toString().trim(), format);
             if (input[1].equals("true")) {
-                TaskList.addNewTask(new Deadline(input[2], input[3], true));
+                TaskList.addNewTask(new Deadline(input[2], dateTime, true));
                 Task.taskCounter--;
             } else {
-                TaskList.addNewTask(new Deadline(input[2], input[3]));
+                TaskList.addNewTask(new Deadline(input[2], dateTime));
             }
             break;
         case "E":
+            dateTimeInput = input[3].split("T",2);
+            sb.append(dateTimeInput[0] + ", " + dateTimeInput[1]);
+            dateTime = LocalDateTime.parse(sb.toString().trim(), format);
             if (input[1].equals("true")) {
-                TaskList.addNewTask(new Event(input[2], input[3], true));
+                TaskList.addNewTask(new Event(input[2], dateTime, true));
                 Task.taskCounter--;
             } else {
-                TaskList.addNewTask(new Event(input[2], input[3]));
+                TaskList.addNewTask(new Event(input[2], dateTime));
             }
             break;
         default:
