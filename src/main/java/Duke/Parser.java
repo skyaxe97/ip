@@ -16,7 +16,7 @@ public class Parser {
     public static final String COMMAND_HELP = "help";
     public static final String COMMAND_DELETE = "delete ";
     public static final String COMMAND_BYE = "bye";
-
+    public static final String COMMAND_FIND = "find ";
     public Parser () {
     }
 
@@ -76,6 +76,8 @@ public class Parser {
                 Ui.printHelp();
             } else if (command.startsWith(COMMAND_DELETE)) {
                 TaskList.deleteTask(command);
+            } else if (command.startsWith(COMMAND_FIND)) {
+                TaskList.findTasks(command);
             } else if (command.startsWith(COMMAND_BYE)) {
             } else {
                 throw new DukeException(EXCEPTION_INVALID_COMMAND);
