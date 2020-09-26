@@ -15,6 +15,7 @@ public class TaskList {
     public static final int EVENT_CHAR_COUNT = 6;
     public static final int DELETE_CHAR_COUNT = 7;
     public static final int DONE_CHAR_COUNT = 5;
+    public static final int FIND_CHAR_COUNT = 5;
     //Printed messages
     public static final String SEPARATOR = "================================";
     public static final String MESSAGE_TASK_IN_LIST = "Here are the tasks in your list:";
@@ -27,11 +28,7 @@ public class TaskList {
     }
 
     public static void printList() {
-        System.out.println(MESSAGE_TASK_IN_LIST);
-        for (int i = 0; i < taskList.size(); i++) {
-            System.out.println((Integer.toString(i + 1) + taskList.get(i).toString()));
-        }
-        System.out.println(SEPARATOR);
+        Ui.printList(taskList);
     }
 
     public static void doTask(String line) {
@@ -107,5 +104,9 @@ public class TaskList {
             }
         }
         Storage.writeToFile(sb.toString());
+    }
+
+    public static void findTasks(String line) {
+        Ui.printTaskQuery(taskList, line);
     }
 }
