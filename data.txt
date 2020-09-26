@@ -1,5 +1,6 @@
 T . false . a
 T . true . a
 T . false . b
-D . false . bye . 2020-12-12T23:49
 D . true . bye . 2020-12-12T23:21
+T . true . 2
+E . true . bye . 2020-12-12T23:21
