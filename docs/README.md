@@ -67,7 +67,7 @@ Exits the program
 
 Format: `bye`
 
-##Command Summary
+## Command Summary
 Command | Format, Example
 ------- | --------------
 todo | `todo DESCRIPTION`, e.g.`todo study`
