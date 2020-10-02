@@ -38,10 +38,15 @@ public class TaskList {
      *             index of task to be marked as done.
      */
     public static void doTask(String line) {
-        int idx = Integer.parseInt(line.substring(DONE_CHAR_COUNT)) - 1;
-        taskList.get(idx).markAsDone();
-        Ui.printMarkedAsDoneMessage(taskList.get(idx).description);
-        Ui.printRemainingTask();
+        try {
+            int idx = Integer.parseInt(line.substring(DONE_CHAR_COUNT)) - 1;
+            taskList.get(idx).markAsDone();
+            Ui.printMarkedAsDoneMessage(taskList.get(idx).description);
+            Ui.printRemainingTask();
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println(e);
+        }
+
     }
 
     /**
@@ -117,11 +122,15 @@ public class TaskList {
     public static void deleteTask(String line) {
         int idx = Integer.parseInt(line.substring(DELETE_CHAR_COUNT)) - 1;
         //prevent double counting when decrementing counter
-        if (!taskList.get(idx).isDone){
-            Task.taskCounter--;
+        try {
+            if (!taskList.get(idx).isDone){
+                Task.taskCounter--;
+            }
+            taskList.remove(idx);
+            printList();
+        } catch (IndexOutOfBoundsException e){
+            System.err.println(e);
         }
-        taskList.remove(idx);
-        printList();
     }
 
     /**
