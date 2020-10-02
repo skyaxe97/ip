@@ -20,7 +20,7 @@ public class Storage {
     }
 
     /**
-     * Creates the new
+     * Creates the new file and directory.
      */
     public static void initialise() {
         try {
@@ -35,6 +35,10 @@ public class Storage {
         }
     }
 
+    /**
+     * Write the input task to the local file
+     * @param task Task, as a string, to be written to file.
+     */
     public static void writeToFile(String task) {
         try {
             FileWriter fw = new FileWriter("data.txt");

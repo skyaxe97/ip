@@ -16,8 +16,14 @@ public class Task {
     }
 
     public void markAsDone () {
-        this.isDone = true;
-        taskCounter--;
+        if (!this.isDone) {
+            this.isDone = true;
+            taskCounter--;
+        }
+        else {
+            System.out.println("Task already marked done.");
+        }
+
     }
 
     @Override
